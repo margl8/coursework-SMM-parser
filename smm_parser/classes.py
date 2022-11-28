@@ -69,3 +69,14 @@ class VkGroup:
         self.posts = request
         print('Посты собраны')
         return pd.DataFrame(self.posts)
+
+    def get_vk_group_id(screen_name):
+        request = rq.get('https://api.vk.com/method/utils.resolveScreenName',
+                         params={
+                             'access_token': token,
+                             'v': version,
+                             'screen_name': screen_name
+                         })
+        response = request.json()
+        return response
+
