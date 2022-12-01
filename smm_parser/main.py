@@ -8,3 +8,5 @@ if __name__ == '__main__':
     print(repr(group))
     group.get_posts(10)  # получить статистику последних 10 постов
     group.get_report()  # получить exl-отчёт по последним 10 постам
+    group.get_members()
+

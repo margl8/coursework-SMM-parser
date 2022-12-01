@@ -2,6 +2,8 @@ import requests as rq
 import pandas as pd
 import openpyxl
 from const import TOKEN, TIME_NOW, VERSION
+import datetime
+import time
 
 
 class VkGroup:
@@ -43,7 +45,7 @@ class VkGroup:
         post = post.drop(columns=['from_id', 'owner_id', 'marked_as_ads',
                                   'edited', 'post_type', 'attachments',
                                   'post_source', 'donut', 'short_text_rate',
-                                  'hash'], axis=1)
+                                  'hash', 'carousel_offset'], axis=1)
         post.insert(1, 'link', "NaN")
         post['link'] = post.apply(lambda x: f'https://vk.com/wall-{self.group_id}_{x["id"]}', axis=1)
         post['date'] = pd.to_datetime(post['date'], unit='s')
@@ -57,7 +59,7 @@ class VkGroup:
 
     def get_posts(self, count):
         # count = int(input('Сколько постов нужно получить?'))
-        #  offset = int(input('offset'))
+        # offset = int(input('offset'))
         request = rq.get("https://api.vk.com/method/wall.get",
                          params={
                              'access_token': TOKEN,
@@ -70,13 +72,37 @@ class VkGroup:
         print('Посты собраны')
         return pd.DataFrame(self.posts)
 
-    def get_vk_group_id(screen_name):
+    def get_members(self):
+        print('Начинаю парсинг подписчиков. Это может занять пару минут...')
+        offset = 0
+        count = 1
+        iter = 0
+        members = []
+
+        while offset < count:
+            request = rq.get('https://api.vk.com/method/groups.getMembers',
+                             params={
+                                 'access_token': TOKEN,
+                                 'v': VERSION,
+                                 'group_id': self.group_id,
+                                 'offset': offset
+                             }).json()['response']
+            count = request['count']
+            offset += 1000
+            members.extend(request['items'])
+            iter += 1
+            if iter % 5 == 0:
+                time.sleep(0.5)
+                continue
+        df = pd.DataFrame(members, columns=[f'{self.screen_name}_members_id'])
+        df.to_csv(f'./{self.screen_name}_members.csv', header=True, index=False)
+        print('Парсинг закончен! Отчёт готов!')
+
+    def get_id(self, screen_name=str):
         request = rq.get('https://api.vk.com/method/utils.resolveScreenName',
                          params={
-                             'access_token': token,
-                             'v': version,
+                             'access_token': TOKEN,
+                             'v': VERSION,
                              'screen_name': screen_name
-                         })
-        response = request.json()
-        return response
-
+                         }).json().get('response', None)
+        return request['object_id']
