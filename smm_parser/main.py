@@ -6,7 +6,5 @@ if __name__ == '__main__':
     group(id)  # происходит __call__, который принимает ID
     print(group)
     print(repr(group))
-    group.get_posts(10)  # получить статистику последних 10 постов
-    group.get_report()  # получить exl-отчёт по последним 10 постам
-    group.get_members()
-
+    print(group.get_posts_by_count(10))
+    group.get_report()
