@@ -1,6 +1,5 @@
 import requests as rq
 import pandas as pd
-import openpyxl
 from const import TOKEN, TIME_NOW, VERSION
 import datetime as dt
 import time
@@ -62,25 +61,29 @@ class VkGroup:
                 time.sleep(0.5)
         return pd.DataFrame(self.posts)
 
-    def get_posts_by_date(self, start_date, end_date):
+    def get_posts_by_date(self, start_date, end_date):  #
         start_date = dt.datetime.strptime(start_date, "%d-%m-%Y")
         start_date = dt.datetime.timestamp(start_date)
         end_date = dt.datetime.strptime(end_date, "%d-%m-%Y")
         end_date = dt.datetime.timestamp(end_date)
-        offset = 0
+        print(start_date, end_date)
 
-        def request(count=100, offset=0):
-            response = rq.get("https://api.vk.com/method/wall.get",
-                              params={
-                                  'access_token': TOKEN,
-                                  'v': VERSION,
-                                  'owner_id': -self.group_id,
-                                  'count': count,
-                                  'offset': offset
-                              }).json()['response']['items']
-            self.posts = response
-            return pd.DataFrame(self.posts)
+        response = rq.get("https://api.vk.com/method/wall.get",
+                          params={
+                              'access_token': TOKEN,
+                              'v': VERSION,
+                              'owner_id': -self.group_id,
+                              'count': 100,
+                              'offset': 0
+                          }).json()['response']['items']
 
+        posts = pd.DataFrame(response)
+        indexDate = posts[(posts['date'] <= start_date)].index
+        posts.drop(indexDate, inplace=True)
+        indexDate = posts[(posts['date'] >= end_date)].index
+        posts.drop(indexDate, inplace=True)
+        self.posts = posts
+        return self.posts.sort_values(by=['id'])
 
     def get_report(self):
         print('Готовлю отчёт...')
@@ -106,6 +109,7 @@ class VkGroup:
             post['likes'] = post.apply(lambda x: x['likes']['count'], axis=1)
             post['views'] = post.apply(lambda x: x['views']['count'], axis=1)
             print('Отчёт готов')
+            post.sort_values(by=['id'])
             post.to_excel(f'./{self.name}_posts_{TIME_NOW}.xlsx', header=True, index=False)
 
     def get_members(self):
