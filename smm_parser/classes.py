@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 import requests as rq
 import pandas as pd
 from const import TOKEN, TIME_NOW, VERSION
@@ -21,7 +24,7 @@ class VkGroup:
     def __repr__(self):
         return (f'id={self.group_id}, '
                 f'screen_name="{self.screen_name}", '
-                f'members ={self.members}')
+                f'members={self.members}')
 
     def __call__(self, group_id=int):
         self.group_id = group_id
@@ -61,7 +64,7 @@ class VkGroup:
                 time.sleep(0.5)
         return pd.DataFrame(self.posts)
 
-    def get_posts_by_date(self, start_date, end_date):  #
+    def get_posts_by_date(self, start_date=str, end_date=str):  #
         start_date = dt.datetime.strptime(start_date, "%d-%m-%Y")
         start_date = dt.datetime.timestamp(start_date)
         end_date = dt.datetime.strptime(end_date, "%d-%m-%Y")
@@ -78,11 +81,12 @@ class VkGroup:
                           }).json()['response']['items']
 
         posts = pd.DataFrame(response)
-        indexDate = posts[(posts['date'] <= start_date)].index
-        posts.drop(indexDate, inplace=True)
-        indexDate = posts[(posts['date'] >= end_date)].index
-        posts.drop(indexDate, inplace=True)
+        index_date = posts[(posts['date'] <= start_date)].index
+        posts.drop(index_date, inplace=True)
+        index_date = posts[(posts['date'] >= end_date)].index
+        posts.drop(index_date, inplace=True)
         self.posts = posts
+        print(f'Количество постов за период: {len(self.posts)}')
         return self.posts.sort_values(by=['id'])
 
     def get_report(self):
@@ -116,7 +120,7 @@ class VkGroup:
         print('Начинаю парсинг подписчиков. Это может занять пару минут...')
         offset = 0
         count = 1
-        iter = 0
+        iteration = 0
         members = []
 
         while offset < count:
@@ -130,19 +134,19 @@ class VkGroup:
             count = request['count']
             offset += 1000
             members.extend(request['items'])
-            iter += 1
-            if iter % 5 == 0:
+            iteration += 1
+            if iteration % 5 == 0:
                 time.sleep(0.5)
                 continue
         df = pd.DataFrame(members, columns=[f'{self.screen_name}_members_id'])
-        print('Парсинг закончен! Отчёт готов!')
-        return df.to_csv(f'./{self.screen_name}_members.csv', header=True, index=False)
+        df.to_csv(f'./{self.screen_name}_members.csv', header=True, index=False)
+        print(f'Парсинг закончен. Подписчиков собрано: {len(members)}. Отчёт готов!')
 
     def get_id(self, screen_name=str):
-        request = rq.get('https://api.vk.com/method/utils.resolveScreenName',
-                         params={
-                             'access_token': TOKEN,
-                             'v': VERSION,
-                             'screen_name': screen_name
-                         }).json().get('response', None)
-        return request['object_id']
+        response = rq.get('https://api.vk.com/method/utils.resolveScreenName',
+                          params={
+                              'access_token': TOKEN,
+                              'v': VERSION,
+                              'screen_name': screen_name
+                          }).json()['response']
+        return response['object_id']

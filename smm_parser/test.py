@@ -1,11 +1,15 @@
-import vk_api
-from const import TOKEN
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
-tools = vk_api.VkTools(TOKEN)
+from classes import VkGroup
 
-wall = tools.get_all('wall.get', 100, {'owner_id': -1})
-print('Posts count:', wall['count'])
-if wall['count']:
-    print('First post:', wall['items'][0], '\n')
-if wall['count'] > 1:
-    print('Last post:', wall['items'][-1])
+group = VkGroup()
+group.get_id('welltex')
+'''
+__str__. 
+'get_id', 
+'get_members', 
+'get_posts_by_count', 
+'get_posts_by_date', 
+'get_report'
+'''
