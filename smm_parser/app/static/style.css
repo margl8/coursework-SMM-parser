@@ -1,0 +1,26 @@
+*, html {
+    font-family: Arial;
+}
+
+#container {
+    width: 100%; /* Ширина слоя */
+    height: 100%;
+   }
+
+#sidebar {
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    background: #BBD0FF;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0; /* Stay at the top */
+}
+
+#content {
+    margin-left: 250px; /* Same as the width of the sidenav */
+}

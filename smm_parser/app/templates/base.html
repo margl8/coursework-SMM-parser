@@ -1,0 +1,37 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport"
+       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"  type="text/css">
+ <title>{% block title %}SMM-парсер{% endblock %}</title>
+ </head>
+ <body>
+  <div id="container">
+   <div id="sidebar"><div id="logo"><h3>SMM-парсер</h3></div>
+    <ul>
+     <li><a href="{{ url_for('about') }}">О сервисе</a></li>
+     <li><a href="{{ url_for('docs') }}">Инструкция</a></li>
+     <li>Инструменты</li>
+      <ul>
+       <li><a href="{{ url_for('id') }}">Получить ID</a></li>
+       <li><a href="{{ url_for('members') }}">Парсер участников</a></li>
+       <li><a href="{{ url_for('report') }}">Генератор отчётов</a></li>
+       <li><a href="{{ url_for('monitor') }}">Мониторинг групп</a></li>
+      </ul>
+    </ul>
+    <div id="footer">
+     <p>&copy; Мария Гладышева</p>
+    <div id="icons"><img src="{{ url_for('static', filename='img/github.svg') }}">
+    <img src="{{ url_for('static', filename='img/telegram.svg') }}"></div>
+    </div>
+   </div>
+   <div id="content">
+    {% block content %}{% endblock %}
+   </div>
+  </div>
+ </body>
+</html>

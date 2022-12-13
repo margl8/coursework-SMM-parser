@@ -1,0 +1,2 @@
+trash = ['from_id', 'marked_as_ads', 'edited', 'post_type', 'attachments', 'post_source', 'donut', 'short_text_rate', 'hash', 'carousel_offset', signer_id
+is_pinned copy_history]

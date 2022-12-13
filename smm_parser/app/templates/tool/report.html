@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Генератор отчётов{% endblock %}
+{% block content %}
+<form>
+    <textarea>Вставьте ссылку на группу ВК</textarea><br>
+    <p>start_date: <input type="date" name="calendar"></p>
+    <p>end_date: <input type="date" name="calendar"></p>
+    <input type="number" id="quantity" name="quantity" min="1" max="5">
+    <p><input type="submit" value="Отправить"></p>
+</form>
+{% endblock %}
