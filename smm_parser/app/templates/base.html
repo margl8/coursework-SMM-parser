@@ -18,15 +18,17 @@
      <li>Инструменты</li>
       <ul>
        <li><a href="{{ url_for('id') }}">Получить ID</a></li>
-       <li><a href="{{ url_for('members') }}">Парсер участников</a></li>
+       <li><a href="{{ url_for('members') }}">Парсер подписчиков</a></li>
        <li><a href="{{ url_for('report') }}">Генератор отчётов</a></li>
        <li><a href="{{ url_for('monitor') }}">Мониторинг групп</a></li>
       </ul>
     </ul>
     <div id="footer">
      <p>&copy; Мария Гладышева</p>
-    <div id="icons"><img src="{{ url_for('static', filename='img/github.svg') }}">
-    <img src="{{ url_for('static', filename='img/telegram.svg') }}"></div>
+    <div id="icons">
+     <a href="https://github.com/margl8"><img src="{{ url_for('static', filename='img/github.svg') }}"></a>
+     <a href="https://t.me/margl8"><img src="{{ url_for('static', filename='img/telegram.svg') }}"></a>
+    </div>
     </div>
    </div>
    <div id="content">

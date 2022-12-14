@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+import os
 import requests as rq
 import pandas as pd
-from const import TOKEN, TIME_NOW, VERSION
+from app.src.const import TOKEN, TIME_NOW, VERSION
 import datetime as dt
 import time
 import numpy as np
@@ -68,9 +69,9 @@ class VkGroup:
         return pd.DataFrame(self.posts)
 
     def get_posts_by_date(self, start_date, end_date):
-        start_date = dt.datetime.strptime(start_date, "%d-%m-%Y")
+        start_date = dt.datetime.strptime(start_date, "%Y-%m-%d")
         start_date = dt.datetime.timestamp(start_date)
-        end_date = dt.datetime.strptime(end_date, "%d-%m-%Y")
+        end_date = dt.datetime.strptime(end_date, "%Y-%m-%d")
         end_date = dt.datetime.timestamp(end_date)
 
         response = rq.get("https://api.vk.com/method/wall.get",
@@ -81,7 +82,6 @@ class VkGroup:
                               'count': 100,
                               'offset': 0
                           }).json()['response']['items']
-
         posts = pd.DataFrame(response)
         index_date = posts[(posts['date'] <= start_date)].index
         posts.drop(index_date, inplace=True)
@@ -89,10 +89,11 @@ class VkGroup:
         posts.drop(index_date, inplace=True)
         self.posts = posts
         self.posts_per_period = len(self.posts)
-        return self.posts_per_period
+        return self.posts
 
     def get_report(self):
         forbidden_symbols = '|+=[]:*?;«,./\<>~@#$%^-_(){}'
+        output = {}
         if self.posts_per_period != 0 or self.posts is None:
             print('Готовлю отчёт...')
             post = self.posts
@@ -100,9 +101,8 @@ class VkGroup:
             trash = ['from_id', 'marked_as_ads', 'edited', 'post_type',
                      'attachments', 'post_source', 'donut', 'short_text_rate',
                      'hash', 'carousel_offset']
-            post.insert(1, 'link', "NaN")
             post['owner_id'] = abs(post['owner_id'])
-            post['link'] = post.apply(lambda x: f'https://vk.com/wall-{self.group_id}_{x["id"]}', axis=1)
+            post['group_link'] = post.apply(lambda x: f'https://vk.com/wall-{self.group_id}_{x["id"]}', axis=1)
             post['date'] = pd.to_datetime(post['date'], unit='s')
             post['likes'] = post.apply(lambda x: x['likes']['count'], axis=1)
             post['comments'] = post.apply(lambda x: x['comments']['count'], axis=1)
@@ -116,15 +116,16 @@ class VkGroup:
             post = post.drop(columns=trash, axis=1)
             post.sort_values(by=['id'])
             post['ER_post'] = post['ER_post'].map('{:.2%}'.format)
-            print('Отчёт готов\n')
+            filename = f'{self.name.strip(forbidden_symbols).replace(" ", "_")}_posts_{TIME_NOW}.xlsx'
             try:
-                post.to_excel(f'./{self.name.strip(forbidden_symbols).replace(" ", "_")}_posts_{TIME_NOW}.xlsx',
-                          header=True, index=False)
+                post.to_excel(f'app/output/{filename}', header=True, index=False)
             except OSError:
-                post.to_excel(f'./{self.screen_name}_posts_{TIME_NOW}.xlsx',
-                              header=True, index=False)
+                filename = f'{self.screen_name}_posts_{TIME_NOW}.xlsx'
+                post.to_excel(f'app/output/{filename}', header=True, index=False)
+            print('Отчёт готов\n')
+            return filename
         else:
-            print('Кэш постов пуст\n')
+            return 'Кэш постов пуст\n'
 
     def get_members(self):
         print('Начинаю парсинг подписчиков. Это может занять пару минут...')
@@ -146,11 +147,12 @@ class VkGroup:
                 members.extend(request['items'])
             except KeyError:
                 time.sleep(0.5)
-        df = pd.DataFrame(members, columns=[f'{self.screen_name}_members_id'])
-        df.to_csv(f'./{self.screen_name}_members.csv', header=True, index=False)
-        print(f'Парсинг закончен. Подписчиков собрано: {len(members)}. Отчёт готов!')
+        print(f'Парсинг окончен. Собрано {len(members)} подписчиков')
+        #members = pd.DataFrame(members, columns=[f'{self.screen_name}_members_id'])
+        #df.to_csv(f'./{self.screen_name}_members.csv', header=True, index=False)
+        return members
 
-    def get_id(screen_name):
+    def get_id(screen_name=str):
         response = rq.get('https://api.vk.com/method/utils.resolveScreenName',
                           params={
                               'access_token': TOKEN,

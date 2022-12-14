@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 {% block title %}Парсер участников{% endblock %}
 {% block content %}
-<form>
-    <textarea>Вставьте ссылку на группу ВК</textarea><br>
+<h1>Спарсить подписчиков</h1>
+<form method="POST">
+    <label>Вставьте ссылку на группу ВК</label><br>
+    <input type="text" name="group_link" id="group_link" placeholder="https://vk.com/group_name"></input><br>
     <input type="submit" value="Отправить"><br>
 </form>
+{% if members %}
+<hr>
+{% for member in members %}
+{{ member }}<br>
+{% endfor %}
+{% endif %}
 {% endblock %}

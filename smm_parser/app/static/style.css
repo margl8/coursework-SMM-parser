@@ -17,10 +17,15 @@
 }
 
 #footer {
+    width: 250px;
     position: fixed;
+    text-align: center;
     bottom: 0; /* Stay at the top */
 }
 
 #content {
     margin-left: 250px; /* Same as the width of the sidenav */
+    padding: 0 10%;
 }
+
+

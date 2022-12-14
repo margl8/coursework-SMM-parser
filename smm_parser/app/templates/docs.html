@@ -1,3 +1,52 @@
 {% extends "base.html" %}
 {% block title %}Инструкция{% endblock %}
-{% block content %}Текст инструкции{% endblock %}
+{% block content %}
+<h1>Инструкция</h1>
+<h2>Оглавление</h2>
+<ol>
+ <li><a href="#1">У меня ошибка. Что делать</a>
+ <li><a href="#2">Получение ID</a>
+ <li><a href="#3">Парсинг подписчиков</a>
+ <li><a href="#4">Генератор отчётов</a>
+</ol>
+<h3 id="1">У меня ошибка. Что делать?</h3>
+<ol>
+ <li>Сделайте скриншот экрана. Для Windows надо нажать Alt+PrintScreen, для Mac Shift+Command+3</li>
+ <li>Пришлите письмо на почту margl8@yandex.ru, вставьте скриншот в письмо и опишите проблему</li>
+</ol>
+<h3 id="2">Получение ID</h3>
+<ol>
+ <li>Скопируйте ссылку на группу ВКонтакте, id которой вам нужно</li>
+ <p align="center"><img src="{{ url_for('static', filename='img/image001.png') }}" align="middle "></p>
+ <li>Вставьте ссылку в текстовое окно</li>
+ <li>Нажмите кнопку «Отправить»</li>
+  <p align="center"><img src="{{ url_for('static', filename='img/image003.png') }}" align="middle "></p>
+ <li>Если происходит ошибка, проверьте правильность написания ссылки. Ссылка должна иметь вид: https://vk.com/group_name</li>
+</ol>
+<h3  id="3">Парсинг подписчиков</h3>
+<ol>
+ <li>Скопируйте ссылку на группу ВКонтакте, участники которой вам нужны</li>
+ <p align="center"><img src="{{ url_for('static', filename='img/image001.png') }}" align="middle "></p>
+ <li>Вставьте ссылку в текстовое окно</li>
+ <li>Нажмите кнопку «Отправить»</li>
+   <p align="center"><img src="{{ url_for('static', filename='img/image005.png') }}" align="middle "></p>
+ <li>Если происходит ошибка, проверьте правильность написания ссылки. Ссылка должна иметь вид: https://vk.com/group_name</li>
+</ol>
+<h3  id="4">Генератор отчётов</h3>
+<ol>
+ <li>Скопируйте ссылку на группу ВКонтакте, отчёт по которой вам нужен</li>
+  <p align="center"><img src="{{ url_for('static', filename='img/image001.png') }}" align="middle "></p>
+ <li>Вставьте ссылку в текстовое окно</li>
+ <li>Выставьте дату начала периода отчётности и конца периода отчётности. Дата начала отчётности не должна быть раньше конца отчётности</li>
+  <p align="center"><img src="{{ url_for('static', filename='img/image007.png') }}" align="middle "></p>
+ <li>Нажмите кнопку «Отправить»</li>
+ <li>Отчёт будет находится в папке приложения по пути: smm_parser\app\output
+ <li>Если происходит ошибка, то:
+<ol>
+<li> Возможно, в группе нет постов за указанный период
+<li> Проверьте правильность написания ссылки и указанных дат. Ссылка должна иметь вид: https://vk.com/group_name. </li>
+<li> Сообщите об ошибке на почту: margl8@yandex.ru
+ </ol>
+ </ol>
+
+{% endblock %}

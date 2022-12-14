@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Мониторинг групп{% endblock %}
 {% block content %}
-<form>
-    <textarea>Вставьте ссылку на группу ВК</textarea><br>
-    <input type="submit" value="Отправить"><br>
+<h1>Провести мониторинг сообществ</h1>
+<form method="POST">
+    <input type="file" name="file"><br>
+    <input type="submit" value="Отправить" accept="text/csv"><br>
 </form>
 {% endblock %}

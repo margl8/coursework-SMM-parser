@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-
-from classes import VkGroup
+from app.src.vk_group import VkGroup
 
 #"%d-%m-%Y"
 
