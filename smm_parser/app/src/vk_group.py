@@ -4,7 +4,7 @@
 import os
 import requests as rq
 import pandas as pd
-from app.src.const import TOKEN, TIME_NOW, VERSION
+from smm_parser.app.src.const import TOKEN, TIME_NOW, VERSION
 import datetime as dt
 import time
 import numpy as np
