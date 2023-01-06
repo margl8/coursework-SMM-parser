@@ -13,14 +13,14 @@
   <div id="container">
    <div id="sidebar"><div id="logo"><h3>SMM-парсер</h3></div>
     <ul>
-     <li><a href="{{ url_for('about') }}">О сервисе</a></li>
-     <li><a href="{{ url_for('docs') }}">Инструкция</a></li>
+     <li><a href="{{ url_for('main.about') }}">О сервисе</a></li>
+     <li><a href="{{ url_for('main.docs') }}">Инструкция</a></li>
      <li>Инструменты</li>
       <ul>
-       <li><a href="{{ url_for('id') }}">Получить ID</a></li>
-       <li><a href="{{ url_for('members') }}">Парсер подписчиков</a></li>
-       <li><a href="{{ url_for('report') }}">Генератор отчётов</a></li>
-       <li><a href="{{ url_for('monitor') }}">Мониторинг групп</a></li>
+       <li><a href="{{ url_for('main.id') }}">Получить ID</a></li>
+       <li><a href="{{ url_for('main.members') }}">Парсер подписчиков</a></li>
+       <li><a href="{{ url_for('main.report') }}">Генератор отчётов</a></li>
+       <li><a href="{{ url_for('main.monitor') }}">Мониторинг групп</a></li>
       </ul>
     </ul>
     <div id="footer">

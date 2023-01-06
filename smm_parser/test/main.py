@@ -1,17 +1,12 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
+from app.vk import Group, Wall
+import pandas as pd
+from const import TIME_NOW
+#145456773 welltex_perm
+#22564985 welltex
+#25240087 hikk
+#38489 poli
+y = Wall(25240087)
+print(y)
+z = y.get_posts_by_date()
 
-from app.src.vk_group import VkGroup
-
-#"%d-%m-%Y"
-
-if __name__ == '__main__':
-    id = 22564985
-    group = VkGroup()  # происходит __init__
-    group(id)  # происходит __call__, который принимает ID
-    print(group)
-    group.get_members()
-
-
-
-
+pd.DataFrame(z).to_excel(f'./filename_{TIME_NOW}.xlsx', header=True, index=False)
